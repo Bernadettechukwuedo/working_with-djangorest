@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .models import Text
-from .serializers import TextSerializer
+from .serializers import TextCreateSerializer, TextSerializer
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -13,7 +13,8 @@ class TextCreateAPIView(generics.CreateAPIView):
     serializer_class = TextSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = TextSerializer(data=request.data)
+        print(self.request.user)
+        serializer = TextCreateSerializer(data=request.data)
         user = self.request.user
 
         if serializer.is_valid():
@@ -24,23 +25,36 @@ class TextCreateAPIView(generics.CreateAPIView):
 
 class TextUpdateAPIView(generics.UpdateAPIView):
     model = Text
-    queryset = Text.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Text.objects.filter(user=user)
     serializer_class = TextSerializer
 
 
 class TextListAPIView(generics.ListAPIView):
     model = Text
-    queryset = Text.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Text.objects.filter(user=user)
+
     serializer_class = TextSerializer
 
 
 class TextDetailAPIView(generics.RetrieveAPIView):
     model = Text
-    queryset = Text.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Text.objects.filter(user=user)
     serializer_class = TextSerializer
 
 
 class TextDeleteAPIView(generics.DestroyAPIView):
     model = Text
-    queryset = Text.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return Text.objects.filter(user=user)
     serializer_class = TextSerializer

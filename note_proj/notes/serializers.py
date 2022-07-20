@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Text
 
 
-class TextSerializer(serializers.ModelSerializer):
+class TextCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Text
         fields = ['title', 'body']
@@ -11,3 +11,9 @@ class TextSerializer(serializers.ModelSerializer):
         user = kwargs['user']
         text = super().create(dict(user=user, **validated_data))
         return text
+
+
+class TextSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Text
+        fields = "__all__"
